@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel='stylesheet' href='stylesheets/style.css' />
+  <title>myNetworthTracker</title>
+</head>
+
+<body class="grey darken-4">
+  <div class="nav z-depth-0">
+    <div class="section center">
+      <h3 class="white-text center">- Networth Tracker -</h3>
+    </div>
+  </div>
+  <!-- this should only show if user signed in -->
+  <div id="logged-in">
+    <div class="section center">
+      <p class="grey-text flow-text">Application for tracking your change in networth over time</p>
+    </div>
+
+    <div class="container section">
+      <div class="row selection">
+        <div class="col s12 l3"><button class="active" data-selection="summary">Summary</button></div>
+        <div class="col s12 l3"><button data-selection="assets">Assets</button></div>
+        <div class="col s12 l3"><button data-selection="liabilities">Liabilities</button></div>
+        <div class="col s12 l3"><button data-selection="progress">Progress</button></div>
+      </div>
+    </div>
+
+    <div class="container section">
+      <div class="row">
+        <div class="col s12 l5">
+          <div class="networthcanvas"></div>
+        </div>
+        <div class="col s12 l6 push-l1">
+          <div class="details"></div>
+          <div class="donut-canvas">
+            <div class="donut-canvas-1"></div>
+            <div class="donut-canvas-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s12 l2">
+              <input type="text" id="date" class="grey-text" placeholder="date" onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'date'" />
+            </div>
+            <div class="input-field col s12 l2">
+              <input type="text" id="networth" class="grey-text" placeholder="$ networth"
+                onfocus="this.placeholder = ''" onblur="this.placeholder = '$ networth'" />
+            </div>
+            <div class="input-field col s12 l6">
+              <input type="text" id="notes" class="grey-text"
+                placeholder="notes about significant financial events this month" onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'notes about significant financial events this month'" />
+            </div>
+            <div class="input-field col s12 l2">
+              <button class="btn-small pink white-text">Snapshot</button>
+            </div>
+          </div>
+          <p class="center pink-text error text-lighten-1"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- this should only show if user signed out -->
+  <div id="logged-out">
+    <h3 class="white-text center flow-text">Login with Firebase</h3>
+    <button onclick={signInWithGoogle()} class="center btn-large pink white-text">Sign In With Google</button>
+    <button onclick={signOut()} class="btn-large pink white-text">Sign Out</button>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+  <script src='javascripts/firebaseAuth.js'></script>
+  <script src="javascripts/firebaseConfig.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="javascripts/index.js"></script>
+</body>
+
+</html>
