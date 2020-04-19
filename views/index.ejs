@@ -33,8 +33,12 @@
         <div class="col s12 l5">
           <div class="networthcanvas"></div>
         </div>
-        <div class="col s12 l6 push-l1">
-          <div class="details"></div>
+        <div class="col s12 l6 push-l3">
+          <div class="details">
+            <h3 class="white-text">Summary</h3>
+            <p id='current-networth' class="grey-text"></p>
+            <p id='change-in-networth' class="grey-text"></p>
+          </div>
           <div class="donut-canvas">
             <div class="donut-canvas-1"></div>
             <div class="donut-canvas-2"></div>
@@ -46,8 +50,8 @@
         <form class="col s12">
           <div class="row">
             <div class="input-field col s12 l2">
-              <input type="text" id="date" class="grey-text" placeholder="date" onfocus="this.placeholder = ''"
-                onblur="this.placeholder = 'date'" />
+              <input type="text" id="date" class="datepicker grey-text" placeholder="date"
+                onfocus="this.placeholder = ''" onblur="this.placeholder = 'date'" />
             </div>
             <div class="input-field col s12 l2">
               <input type="text" id="networth" class="grey-text" placeholder="$ networth"
@@ -79,10 +83,13 @@
   <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.1/js/materialize.min.js"></script>
   <script src='javascripts/firebaseAuth.js'></script>
   <script src="javascripts/firebaseConfig.js"></script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="javascripts/index.js"></script>
+  <script src="javascripts/graphNetworthLine.js"></script>
 </body>
 
 </html>

@@ -26,6 +26,8 @@ input {
   text-align: center;
 }
 
+/* D3 graphs */
+
 .x-axis path, .y-axis path, .x-axis line, .y-axis line {
   stroke: #ccc;
 

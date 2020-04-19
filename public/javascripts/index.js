@@ -19,8 +19,13 @@ btns.forEach(btn => {
     e.target.classList.add('active');
 
     // call update function
-    // update(data);
+    update(data);
   })
+});
+
+// date picker
+$(document).ready(function () {
+  $('.datepicker').datepicker();
 });
 
 // form submit
@@ -28,13 +33,12 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const networthValue = parseInt(networth.value);
-  const dateValue = date.value.toString();
+  const dateValue = new Date(date.value);
 
-  if (dateValue && notes.value && !isNaN(networthValue)) {
-
+  if (!isNaN(dateValue.getTime()) && notes.value && !isNaN(networthValue)) {
     db.collection('networth').add({
-      user: 'joe',
-      date: dateValue,
+      user: firebase.auth().currentUser.uid,
+      date: dateValue.toString(),
       networth: networthValue,
       notes: notes.value
     })
@@ -43,8 +47,9 @@ form.addEventListener('submit', (e) => {
         date.value = "";
         networth.value = "";
         notes.value = "";
-      })
+      });
   } else {
     error.textContent = 'Please enter valid values before submitting';
   }
 });
+
