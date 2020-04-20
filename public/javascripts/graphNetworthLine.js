@@ -33,37 +33,28 @@ const line = d3.line()
 // line path elements
 const path = graph.append('path');
 
-// create dotted line group and append to graph
-const dottedLines = graph.append('g')
-  .attr('class', 'lines')
-  .attr('opacity', 0);
-// create x dotted line and append to dotted line group
-const xDottedLine = dottedLines.append('line')
-  .attr('stroke', '#aaa')
-  .attr('stroke-width', 1)
-  .attr('stroke-dasharray', 4);
-// create y dotted line and append to dotted line gorup
-const yDottedLine = dottedLines.append('line')
-  .attr('stroke', '#aaa')
-  .attr('stroke-width', 1)
-  .attr('stroke-dasharray', 4);
-
 // set detail information
 const currentNetworth = document.querySelector('#current-networth');
 const changeInNetworth = document.querySelector('#change-in-networth');
+
+// function to format numbers nicely with , separators
+const formatNumber = (number) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
 
 // draw graph (data dependent items of graph)
 const update = (data) => {
   // filter data to current activity
   // data = data.filter(item => item.selection == activity);
 
-  const newNetworth = data.sort((a, b) => b.date > a.date)[0].networth;
-  const deltaNetworth = newNetworth - data.sort((a, b) => b.date > a.date)[1].networth;
-  currentNetworth.textContent = `$ Current: ${newNetworth.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-  changeInNetworth.textContent = `$ Change: ${deltaNetworth.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-
   // sort data based on date object
   data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // set financial info details
+  const newNetworth = data.reverse()[0].networth;
+  const deltaNetworth = newNetworth - data[1].networth;
+  currentNetworth.textContent = `$ Current: ${formatNumber(newNetworth)}`;
+  changeInNetworth.textContent = `$ Change: ${formatNumber(deltaNetworth)}`;
 
   // set scale domains
   x.domain(d3.extent(data, d => new Date(d.date)));
@@ -80,6 +71,18 @@ const update = (data) => {
   const circles = graph.selectAll('circle')
     .data(data);
 
+  // create tip
+  const tip = d3.tip()
+    .attr('class', 'tip card')
+    .html(data => {
+      let content = `<div> ${data.date.substring(0, 15)}</div>`;
+      content += `<div> $${formatNumber(data.networth)}</div> `;
+      content += `<div> ${data.notes}</div>`;
+      return content;
+    });
+
+  graph.call(tip);
+
   //  update current points
   circles
     .attr('cx', d => x(new Date(d.date)))
@@ -91,39 +94,19 @@ const update = (data) => {
   // add new points
   circles.enter()
     .append('circle')
-    .attr('r', 4)
+    .attr('r', 7)
     .attr('cx', d => x(new Date(d.date)))
     .attr('cy', d => y(d.networth))
     .attr('fill', '#ccc');
 
   graph.selectAll('circle')
     .on('mouseover', (d, i, n) => {
-      d3.select(n[i])
-        .transition().duration(100)
-        .attr('r', 8)
-        .attr('fill', '#fff');
-      // set x dotted line coords (x1, x2, y1, y2)
-      xDottedLine
-        .attr('x1', x(new Date(d.date)))
-        .attr('x2', x(new Date(d.date)))
-        .attr('y1', graphHeight)
-        .attr('y2', y(d.networth));
-      // set y dotted line coords (x1, x2, y1, y2)
-      yDottedLine
-        .attr('x1', 0)
-        .attr('x2', x(new Date(d.date)))
-        .attr('y1', y(d.networth))
-        .attr('y2', y(d.networth));
-      // show dotted line group (.style, opacity)
-      dottedLines.style('opacity', 1);
+      tip.show(d, n[i])
+        .transition().duration(100);
     })
     .on('mouseleave', (d, i, n) => {
-      d3.select(n[i])
-        .transition().duration(100)
-        .attr('r', 4)
-        .attr('fill', '#ccc')
-      // hide the dotted line group (.style, opacity)
-      dottedLines.style('opacity', 0);
+      tip.hide()
+        .transition().duration(100);
     })
 
   // create axis
@@ -132,7 +115,7 @@ const update = (data) => {
     .tickFormat(d3.timeFormat('%d %b'));
   const yAxis = d3.axisLeft(y)
     .ticks(4)
-    .tickFormat(d => '$' + d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+    .tickFormat(d => '$' + formatNumber(d));
 
   // call axes
   xAxisGroup.call(xAxis);

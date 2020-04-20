@@ -26,8 +26,14 @@ input {
   text-align: center;
 }
 
-/* D3 graphs */
+.tip {
+      padding: 10px;
+      background: #333;
+      color: #fff;
+      text-align: center;
+    }
 
+/* D3 graphs */
 .x-axis path, .y-axis path, .x-axis line, .y-axis line {
   stroke: #ccc;
 

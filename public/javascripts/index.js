@@ -48,6 +48,7 @@ form.addEventListener('submit', (e) => {
         networth.value = "";
         notes.value = "";
       });
+    update(data);
   } else {
     error.textContent = 'Please enter valid values before submitting';
   }
